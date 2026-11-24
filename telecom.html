@@ -534,7 +534,7 @@ var GRP0=['','','','','g2','g2','g2','g2','g2','g2','g3','g3','','','g4','g4','g
 var H=C.H||H0, GRP=C.GRP||GRP0, NUMC=C.NUMC;
 var COLS=C.COLS; if(RO&&C.roHide) COLS=COLS.filter(function(c){ return C.roHide.indexOf(c)<0; });
 var CARGA=null; try{ var st0=JSON.parse(lsGet(KP+'dados')||'null'); if(st0&&st0.uda&&st0.uda.length){ CARGA=st0; DATA.uda=st0.uda; if(st0.fam&&Object.keys(st0.fam).length) DATA.fam=st0.fam; DATA.fontes.uda=st0.nome; } }catch(e){}
-var ROWS=DATA.uda.map(C.fill);
+var ROWS=DATA.uda.map(C.fill), CDU={n:0,s:0}; var CDg=window.CDX; if(C.inst&&CDg&&CDg.c) ROWS.forEach(function(r){ var x=CDg.c[String(r[0]).trim().toUpperCase()]; if(!x) return; var ch=false; if(x[0]!=null&&r[4]!==x[0]){ r[4]=x[0]; ch=true; } if(x[1]&&String(r[11]).trim().toUpperCase()!==String(x[1]).trim().toUpperCase()){ r[11]=x[1]; ch=true; } r._cd=x; CDU.n++; if(ch) CDU.s++; }); if(C.inst) window.__CDU=CDU;
 var FAMD=DATA.fam||{};
 /* ---------- EDIÇÃO ---------- */
 var RAWUDA=DATA.uda, ORIG=ROWS.map(function(r){ return r.slice(); }), KEYS={}, EDITS={}, EK=KP+'udaEdits';
@@ -1214,7 +1214,7 @@ var BI=BI0, BIC=null; try{ var b0=JSON.parse(lsGet('ctrlCabos.bi')||'null'); if(
 var PCE={}; try{ PCE=JSON.parse(lsGet('ctrlCabos.pcEdits')||'{}')||{}; }catch(e){ PCE={}; }
 function pcSaveE(){ try{ localStorage.setItem('ctrlCabos.pcEdits',JSON.stringify(PCE)); }catch(e){} }
 var PC=PC0, PCC=null; try{ var p0=JSON.parse(lsGet('ctrlCabos.pc')||'null'); if(p0&&p0.fam&&p0.fam.length){ PC=p0; PCC=p0; } }catch(e){}
-var CD=CD0, CDC=null; try{ var cd0=JSON.parse(lsGet('ctrlCabos.corte')||'null'); if(cd0&&cd0.c){ CD=cd0; CDC=cd0; } }catch(e){}
+var CD=CD0, CDC=null; try{ var cd0=JSON.parse(lsGet('ctrlCabos.corte')||'null'); if(cd0&&cd0.c){ CD=cd0; CDC=cd0; } }catch(e){} window.CDX=CD;
 function cdParse(wb,nome){ var U=function(v){ return String(v==null?'':v).replace(/\s+/g,' ').trim().toUpperCase(); }, p2=function(n){ return ('0'+n).slice(-2); };
   var nomes=wb.SheetNames.filter(function(n){ return /CORTE/i.test(n); }).concat(wb.SheetNames.filter(function(n){ return !/CORTE/i.test(n); }));
   for(var si=0;si<nomes.length;si++){ var R=XLSX.utils.sheet_to_json(wb.Sheets[nomes[si]],{header:1,raw:true,defval:null,blankrows:false}), hr=-1;
