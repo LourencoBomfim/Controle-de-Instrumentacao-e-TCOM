@@ -273,7 +273,7 @@ td.eqm{cursor:pointer}td.eqm:hover{outline:1px dashed #0F766E;outline-offset:-3p
   <h1 class="pagetitle">Equipamentos de telecom</h1>
   <div class="pagesub">Lista de equipamentos do contrato (por TAG) cruzada com o Mapa de Suprimentos · entregue = soma da coluna BA das linhas de Telecomunicações com CONCLUÍDO na coluna DE, somando todos os códigos CONSAG do mesmo equipamento · saldo = entregue − quantidade do contrato · ordenado pela necessidade, da maior para a menor</div>
   <div id="eqSnap" class="rfsnap"><div class="snap-h"><b>Equipamentos de telecom — saldo</b><span id="eqDt"></span></div>
-  <section class="rs-band" id="eqBand" style="grid-template-columns:repeat(5,1fr)"></section>
+  <section class="rs-band" id="eqBand" style="grid-template-columns:repeat(4,1fr)"></section>
   <div class="card" style="overflow:hidden;margin-bottom:16px">
     <div class="rf-title">SALDO POR EQUIPAMENTO <span class="rf-btns"><button class="btn" id="eqPrint">🖨 Imprimir / PDF</button><button class="btn" id="eqExp">Exportar (Excel/CSV)</button></span></div>
     <div class="tablewrap" style="max-height:none"><table class="rf" id="eqRf"></table></div>
@@ -847,8 +847,8 @@ function tagRange(t){ var a=t.map(function(r){ return String(r[0]); }); return a
 function blkE(hbg,htx,title,bbg,items){ return '<div class="rs-blk"><div class="h" style="background:'+hbg+';color:'+htx+'">'+title+'</div><div class="b" style="background:'+bbg+'">'+items.map(function(x){ return '<div><small>'+x[0]+'</small><span style="color:'+x[2]+'">'+x[1]+'</span></div>'; }).join('')+'</div></div>'; }
 function renderEq(){ var g=document.getElementById.bind(document); if(!g('eqRf')) return; EQL=eqCalc();
   var T={tags:0,q:0,E:0,nec:0,ok:0,tp:0,pb:0}; EQL.forEach(function(x){ T.tags+=x.tags.length; if(x.pb) T.pb+=x.tags.length; T.tp++; T.q+=x.q; T.E+=Math.min(x.E,x.q); T.nec+=x.nec; if(x.nec===0) T.ok++; });
-  g('eqBand').innerHTML=blkE('#37474F','#fff','TAGs no contrato','#ECEFF1',[['TAGs',fmE(T.tags),'#37474F'],['Petrobras',fmE(T.pb),'#58637F']])+blkE('#0F766E','#fff','Entregue (Mapa)','#F0FAF8',[['Unid. cobertas',fmE(T.E),'#0F766E'],['de',fmE(T.q),'#37474F']])+
-    blkE('#C0392B','#fff','Falta entregar','#FDECEC',[['Unidades',fmE(T.nec),'#C0392B']])+blkE('#FFC000','#3C2D00','Tipos de equipamento','#FFFAEB',[['Cobertos',T.ok+'/'+T.tp,'#3C2D00']])+blkE('#1F5FD6','#fff','Atendimento','#F3F7FE',[['%',fmE(T.q?Math.round(T.E/T.q*1000)/10:0)+'%','#1F5FD6']]);
+  g('eqBand').innerHTML=blkE('#37474F','#fff','TAGs no contrato','#ECEFF1',[['TAGs',fmE(T.tags),'#37474F'],['Petrobras',fmE(T.pb),'#58637F']])+blkE('#0F766E','#fff','Entregue (Mapa)','#F0FAF8',[['Unidades',fmE(T.E),'#0F766E']])+
+    blkE('#C0392B','#fff','Falta entregar','#FDECEC',[['Unidades',fmE(T.nec),'#C0392B']])+blkE('#1F5FD6','#fff','Atendimento','#F3F7FE',[['%',fmE(T.q?Math.round(T.E/T.q*1000)/10:0)+'%','#1F5FD6']]);
   var h='<thead><tr><th class="th-g">Equipamento</th><th class="th-g">TAGs</th><th class="th-g">Fornecimento</th><th class="th-g">Item EAP</th><th class="th-a">Qtd contrato</th><th class="th-t">Entregue (Mapa)</th><th class="th-b">Saldo</th><th class="th-b">Necessidade</th><th class="th-b">Código CONSAG</th></tr></thead><tbody>';
   EQL.forEach(function(x){ var sc=(x.saldo<0?' style="color:#B42318;font-weight:700"':x.saldo>0?' style="color:#0F766E;font-weight:700"':'');
     h+='<tr data-eq="'+escG(x.k)+'"><td class="desc"><b>'+escG(x.d)+'</b></td><td class="mono" style="white-space:normal;font-size:11.5px" title="'+escG(x.tags.map(function(r){ return r[0]; }).join(', '))+'">'+escG(tagRange(x.tags))+' <small>('+x.tags.length+')</small></td><td>'+escG(x.forn)+'</td><td class="mono">'+escG(x.eap)+'</td>'+
